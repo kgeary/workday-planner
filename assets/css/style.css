@@ -13,6 +13,10 @@ body {
     padding: 10px;
   }
   
+  footer {
+    margin-top: 2rem;
+  }
+
   .jumbotron {
     text-align: center;
     background-color: transparent;
@@ -83,4 +87,8 @@ body {
     width: 100%;
     color: black;
     background-color: white;
+  }
+
+  .active {
+    opacity: 0.8;
   }
