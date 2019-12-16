@@ -74,7 +74,8 @@ body {
     
   }
 
-  .saveBtn i:hover {
+  .saveBtn i:hover,
+  .saveBtn.active i {
     font-size: 40px;
     transition: all .3s ease-in-out;
   }

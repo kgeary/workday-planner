@@ -1,5 +1,5 @@
-//const times = [9,10,11,12,13,14,15,16,17];
-const times = [9,10,11,12,13,14,15,16,17,18,19,20,21,22]; // TEST-LIST
+const times = [9,10,11,12,13,14,15,16,17];
+//const times = [9,10,11,12,13,14,15,16,17,18,19,20,21,22]; // TEST-LIST
 
 // JQuery
 $(function() {
@@ -21,17 +21,17 @@ $(function() {
         $("#save-toast").fadeIn(750).fadeOut(1500);
     });
 
-    // Change opacity on hover
+    // Change opacity of description on hover
     $('.description').hover( function() {
         $(this).toggleClass("active");
     });
-    // Hover over save icon changes parent opacity
-    $('i').hover( function() {
-        $(this).parent().toggleClass("active");
+
+    // Hover over save button changes opacity and makes disk larger
+    $('.saveBtn').hover( function() {
+        $(this).toggleClass("active");
     });
 
-
-    // Update past, present, future classes
+    // Update past, present, future classes periodically (30s)
     let tenseCheck = setInterval(checkTimeBlocks, 30000);
 })
 
