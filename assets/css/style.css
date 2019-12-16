@@ -25,6 +25,18 @@ body {
     border-bottom: 10px solid black;
   }
   
+  #dateGroup {
+    display: inline-block;
+    /* background-color: lightgray; */
+    padding: 1rem;
+    /* border: 1px solid black; */
+  }
+
+  input[type="date"] {
+    display: inline-block;
+    text-align: center;
+  }
+
   .description{
     white-space: pre-wrap;
   }

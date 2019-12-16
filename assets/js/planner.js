@@ -1,7 +1,7 @@
 const times = [9,10,11,12,13,14,15,16,17];
 //const times = [9,10,11,12,13,14,15,16,17,18,19,20,21,22]; // TEST-LIST
-let curDate = moment(); // Current Day is initially Today
 let updateInterval;
+let curDate = moment(); // Current Day is initially Today
 
 // JQuery
 $(function() {
@@ -10,6 +10,7 @@ $(function() {
     $("#datepicker").val(moment().format('YYYY-MM-DD'));
     $("#datepicker").on("change", function () {
         curDate = moment($(this).val(), "YYYY-MM-DD");
+        if (!curDate.isValid()) curDate = moment();
         SetCurrentDateLabel();
         clearInterval(updateInterval);
         $(".container").html("");
@@ -34,7 +35,7 @@ function loadDay() {
         let hr = $colHour.text();
         let txt = $(this).siblings(".description").val();
         console.log(hr, txt);
-        localStorage.setItem(curDate.format("YYYYMMDD-") + hr.trim(), txt.trim());
+        localStorage.setItem(getStoreDatePrefix() + hr.trim(), txt.trim());
         $("#save-toast").fadeIn(750).fadeOut(1500);
     });
 
@@ -58,9 +59,9 @@ function checkTimeBlocks() {
     let $hours = $('.hour');
     $hours.each(function(index) {
         let $text = $(this).next();
-        let curTime = $(this).text();
+        let hour12ampm = $(this).text();
         let n = moment();
-        let t = moment(curDate.format("YYYYMMDD ") + curTime, "YYYYMMDD hA");
+        let t = getMoment12H(hour12ampm);
         console.log("TTTT", t);
         let tense = getTense(n, t);
         if ($text.is("."+tense)) {
@@ -80,13 +81,13 @@ function checkTimeBlocks() {
  }
 
 // Create a Time Block Group
-function createTimeBlock(hour) {
+function createTimeBlock(hour24) {
     let timeBlock = createEl("div", "time-block");
     let row = createEl("div", "row");
     timeBlock.appendChild(row);
-    let colHour = createEl("div", "col-sm-1 pt-3 hour", hour);
+    let colHour = createEl("div", "col-sm-1 pt-3 hour", hour24);
     row.appendChild(colHour);
-    let colText = createEl("textarea", "col-sm-10 description", hour);
+    let colText = createEl("textarea", "col-sm-10 description", hour24);
     row.appendChild(colText);
     let colSave = createEl("div", "col-sm-1 saveBtn");
     row.appendChild(colSave);
@@ -97,16 +98,16 @@ function createTimeBlock(hour) {
 }
 
 // Create a single page element
-function createEl(tag, cls, hour) {
+function createEl(tag, cls, hour24) {
     let el = document.createElement(tag);
     el.setAttribute("class", cls);
     // Special Handling for Hour and Text Columns
-    if (el, hour) {
-        let t = getTime24H(hour);
+    if (hour24) {
+        let t = getMoment24H(hour24);
         let n = moment();
         if (tag === "textarea") {
             cls += " " + getTense(n, t);
-            el.textContent = localStorage.getItem(curDate.format("YYYYMMDD-") + formatAmPm(t));
+            el.textContent = localStorage.getItem(getStoreDatePrefix() + formatAmPm(t));
         } else {
             el.textContent = formatAmPm(t).padEnd(4, " ");
         }
@@ -130,9 +131,18 @@ function getTense(n, t) {
     return cls;
 }
 
-function getTime24H(hour) { 
-    return moment(curDate.format("YYYYMMDD ") + hour, "YYYYMMDD H");
+function getStoreDatePrefix() {
+    return curDate.format("YYYYMMDD-");
 }
+
+function getMoment12H(hour12ampm) { 
+    return moment(curDate.format("YYYYMMDD ") + hour12ampm, "YYYYMMDD hA");
+}
+
+function getMoment24H(hour24) { 
+    return moment(curDate.format("YYYYMMDD ") + hour24, "YYYYMMDD H");
+}
+
 function formatAmPm(m) { 
     return m.format("hA");
 }
