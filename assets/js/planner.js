@@ -1,23 +1,40 @@
 const times = [9,10,11,12,13,14,15,16,17];
 //const times = [9,10,11,12,13,14,15,16,17,18,19,20,21,22]; // TEST-LIST
+let curDate = moment(); // Current Day is initially Today
+let updateInterval;
 
 // JQuery
 $(function() {
     // Set the date in the header
-    $("#currentDay").text(moment().format('dddd, MMMM Do'));
+    SetCurrentDateLabel();
+    $("#datepicker").val(moment().format('YYYY-MM-DD'));
+    $("#datepicker").on("change", function () {
+        curDate = moment($(this).val(), "YYYY-MM-DD");
+        SetCurrentDateLabel();
+        clearInterval(updateInterval);
+        $(".container").html("");
+        loadDay();
+    });
+    loadDay();
+})
 
+function SetCurrentDateLabel() {
+    $("#currentDay").text(curDate.format('dddd, MMMM Do'));
+}
+
+function loadDay() {
     // Create and Load Time Blocks
     for(let index=0; index<times.length; index++) {
         $(".container").append(createTimeBlock(times[index]));
     }
 
-    // Handle Save Events
+    // Setup Save Events
     $(".saveBtn").on("click", function() {
         var $colHour = $(this).siblings(".hour");
         let hr = $colHour.text();
         let txt = $(this).siblings(".description").val();
         console.log(hr, txt);
-        localStorage.setItem(moment().format("YYYYMMDD-") + hr.trim(), txt.trim());
+        localStorage.setItem(curDate.format("YYYYMMDD-") + hr.trim(), txt.trim());
         $("#save-toast").fadeIn(750).fadeOut(1500);
     });
 
@@ -32,8 +49,8 @@ $(function() {
     });
 
     // Update past, present, future classes periodically (30s)
-    let tenseCheck = setInterval(checkTimeBlocks, 30000);
-})
+    updateInterval = setInterval(checkTimeBlocks, 30000);
+}
 
 // Check the timeblocks to see if their tense has changed
 function checkTimeBlocks() {
@@ -42,10 +59,11 @@ function checkTimeBlocks() {
     $hours.each(function(index) {
         let $text = $(this).next();
         let curTime = $(this).text();
-        let n = moment().clone();
-        let t = moment(curTime, "hA");
+        let n = moment();
+        let t = moment(curDate.format("YYYYMMDD ") + curTime, "YYYYMMDD hA");
+        console.log("TTTT", t);
         let tense = getTense(n, t);
-        if ($text.has("."+tense)) {
+        if ($text.is("."+tense)) {
             //console.log("NO CHANGE");
         } else if (tense === "present") {
             $text.removeClass("past future");
@@ -85,10 +103,10 @@ function createEl(tag, cls, hour) {
     // Special Handling for Hour and Text Columns
     if (el, hour) {
         let t = getTime24H(hour);
-        let n = getNow();
+        let n = moment();
         if (tag === "textarea") {
             cls += " " + getTense(n, t);
-            el.textContent = localStorage.getItem(n.format("YYYYMMDD-") + formatAmPm(t));
+            el.textContent = localStorage.getItem(curDate.format("YYYYMMDD-") + formatAmPm(t));
         } else {
             el.textContent = formatAmPm(t).padEnd(4, " ");
         }
@@ -102,7 +120,7 @@ function createEl(tag, cls, hour) {
 // returns appropriate tense class (past, present, or future)
 function getTense(n, t) {
     let cls;
-    if (n.isSame(t, "hour")) {
+    if (n.isSame(t, "hour") && n.isSame(t, "day") && n.isSame(t, "month") && n.isSame(t, "year")) {
         cls = "present";
     } else if (n.isAfter(t)) {
         cls = "past"
@@ -113,10 +131,7 @@ function getTense(n, t) {
 }
 
 function getTime24H(hour) { 
-    return moment(hour, "H");
-}
-function getNow() { 
-    return moment(); 
+    return moment(curDate.format("YYYYMMDD ") + hour, "YYYYMMDD H");
 }
 function formatAmPm(m) { 
     return m.format("hA");
