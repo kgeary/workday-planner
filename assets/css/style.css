@@ -63,9 +63,24 @@ body {
     border-bottom-right-radius: 15px;
     background-color: #06AED5;
     color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    
   }
-  
+
   .saveBtn i:hover {
-    font-size: 20px;
+    font-size: 40px;
     transition: all .3s ease-in-out;
+  }
+
+  #save-toast {
+    position: fixed;
+    bottom: 0px;
+    text-align: center;
+    margin: 0;
+    width: 100%;
+    color: black;
+    background-color: white;
   }
