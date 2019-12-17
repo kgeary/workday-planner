@@ -64,8 +64,8 @@ function checkTimeBlocks() {
         let t = getMoment12H(hour12ampm);
         console.log("TTTT", t);
         let tense = getTense(n, t);
-        if ($text.is("."+tense)) {
-            //console.log("NO CHANGE");
+        if ($text.hasClass(tense)) {
+            //console.log("/NO CHANGE");
         } else if (tense === "present") {
             $text.removeClass("past future");
         } else if (tense === "past") {
