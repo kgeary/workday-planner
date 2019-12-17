@@ -82,14 +82,14 @@ function checkTimeBlocks() {
 
 // Create a Time Block Group
 function createTimeBlock(hour24) {
-    let timeBlock = createEl("div", "time-block");
     let row = createEl("div", "row");
-    timeBlock.appendChild(row);
-    let colHour = createEl("div", "col-sm-1 pt-3 hour", hour24);
+    let timeBlock = createEl("div", "time-block");
+    timeBlock.appendChild(row);    
+    let colHour = createEl("div", "col-sm-1 col-12 pt-3 hour", hour24);
     row.appendChild(colHour);
-    let colText = createEl("textarea", "col-sm-10 description", hour24);
+    let colText = createEl("textarea", "col-sm-10 col-12 description", hour24);
     row.appendChild(colText);
-    let colSave = createEl("div", "col-sm-1 saveBtn");
+    let colSave = createEl("div", "col-sm-1 col-12 saveBtn");
     row.appendChild(colSave);
     let icon = createEl("i", "fas fa-save");
     colSave.appendChild(icon);
