@@ -31,9 +31,9 @@ function loadDay() {
 
     // Setup Save Events
     $(".saveBtn").on("click", function() {
-        var $colHour = $(this).siblings(".hour");
-        let hr = $colHour.text();
-        let txt = $(this).siblings(".description").val();
+        var $desc = $(this).siblings(".description");
+        let hr = $desc.attr("data-hour");
+        let txt = $desc.val();
         console.log(hr, txt);
         localStorage.setItem(getStoreDatePrefix() + hr.trim(), txt.trim());
         $("#save-toast").fadeIn(750).fadeOut(1500);
@@ -107,7 +107,9 @@ function createEl(tag, cls, hour24) {
         let n = moment();
         if (tag === "textarea") {
             cls += " " + getTense(n, t);
-            el.textContent = localStorage.getItem(getStoreDatePrefix() + formatAmPm(t));
+            let displayHour = formatAmPm(t);
+            el.textContent = localStorage.getItem(getStoreDatePrefix() + displayHour);
+            el.setAttribute("data-hour", displayHour);
         } else {
             el.textContent = formatAmPm(t).padEnd(4, " ");
         }
