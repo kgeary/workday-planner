@@ -2,7 +2,11 @@ const times = [9,10,11,12,13,14,15,16,17];
 //const times = [9,10,11,12,13,14,15,16,17,18,19,20,21,22]; // TEST-LIST
 const fadeStart = 3000;
 const fadeNormal = 1500;
-const timeBlockDelayMS = 10000;
+// Save Toast Fade Times
+const fadeToastIn = 750;
+const fadeToastOut = 1500;
+// Time Block Updates
+const timeBlockDelayMS = 30000;
 
 let updateInterval; // Periodic Update of past,present,future class
 let curDate = moment(); // Current Day is initially Today
@@ -12,7 +16,7 @@ $(function() {
     // Set the date in the header
     SetCurrentDateLabel();
 
-    // Load Multi-day setting from local storage and set the check accordingly
+    // Load Multi-day setting from local storage and update the checked state
     LoadMultiDaySettings();
     
     // Watch for click of Enable Multi-day support
@@ -23,32 +27,33 @@ $(function() {
     $("#datepicker").on("change", DatePickerChange);
 
     // Load the day into the view Once at the start with a fade-in
-    loadDay();
-    $(".container").hide().fadeIn(fadeStart);
+    loadDay(fadeStart);
 })
 
 function LoadMultiDaySettings() {
     // Load Multi-day setting from local storage and set the check accordingly
     let enableMultiDay = (localStorage.getItem("enableMultiDay") === "true") ? true : false;
     if (enableMultiDay) {
-        console.log("Mutli-day enabled")
+        // Set the check, Show the DateGroup, trigger Date Change
         $("#enableDate").prop("checked", true);
         $("#dateGroup").show();
         DatePickerChange();
     }
 }
+
+// When the Multi-day Checkbox changes state
 function MultiDayChecked() {
-    // Update Local Storage with Mult-day setting
+    // Update Local Storage with new Multi-day setting
     let $ed = $("#enableDate");
     localStorage.setItem("enableMultiDay", $ed.prop("checked"));
-    // Show or Hide the Date Selector and reset date if needed
+    // Show or Hide the Date Selector and reset date as needed
     if($ed.is(":checked")){
         $("#dateGroup").show();
     } else {
         $("#dateGroup").hide();
         // Reset the day to today
         curDate = moment();
-        loadDay();
+        loadDay(fadeNormal);
     }
 }
 
@@ -62,9 +67,7 @@ function DatePickerChange() {
 
     // Update the header, cancel existing timers, fade in the content
     SetCurrentDateLabel();
-    clearInterval(updateInterval);
-    loadDay();
-    $(".container").hide().fadeIn(fadeNormal);
+    loadDay(fadeNormal);
 }
 // Set's the current day in the header
 function SetCurrentDateLabel() {
@@ -72,7 +75,9 @@ function SetCurrentDateLabel() {
 }
 
 // Load the current day onto the page
-function loadDay() {
+function loadDay(fadeTime=0) {
+    clearInterval(updateInterval);
+
     $(".container").html(""); // Clear out old data
     // Create and Load Time Blocks
     for(let index=0; index<times.length; index++) {
@@ -85,7 +90,7 @@ function loadDay() {
         let hour = $desc.attr("data-hour");
         let text = $desc.val();
         localStorage.setItem(getStoreDatePrefix() + hour.trim(), text.trim());
-        $("#save-toast").fadeIn(750).fadeOut(fadeNormal);
+        $("#save-toast").fadeIn(fadeToastIn).fadeOut(fadeToastOut);
     });
 
     // Setup Interval to Update past, present, future classes periodically (30s)
@@ -102,6 +107,8 @@ function loadDay() {
     $('.saveBtn').hover( function() {
         $(this).toggleClass("active");
     });
+
+    $(".container").hide().fadeIn(fadeTime);
 }
 
 // Check the timeblocks to see if their tense has changed

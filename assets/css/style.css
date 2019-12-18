@@ -26,8 +26,25 @@ body {
     padding: 32px 32px;
   }
   
+  #dateOptions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  #labelDate {
+    margin: 1rem 0;
+  }
+
+  #enableDate {
+    margin: 0.25rem;
+  }
+
   #dateGroup {
     display: none;
+    margin-left: 1rem;
+    margin-1top: 1rem;
   }
 
   input[type="date"] {
