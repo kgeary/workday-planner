@@ -53,7 +53,7 @@ function MultiDayChecked() {
         $("#dateGroup").hide();
         // Reset the day to today
         curDate = moment();
-        loadDay(fadeNormal);
+        loadDay(0);
     }
 }
 
