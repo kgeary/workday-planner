@@ -23,13 +23,12 @@ body {
     color: black;
     border-radius: 0;
     border-bottom: 10px solid black;
+    padding: 32px 32px;
   }
   
   #dateGroup {
-    display: inline-block;
-    /* background-color: lightgray; */
+    display: none;
     padding: 1rem;
-    /* border: 1px solid black; */
   }
 
   input[type="date"] {
@@ -104,6 +103,7 @@ body {
   .active {
     opacity: 0.8;
   }
+
   @media screen and (max-width: 767px) {
     .hour {
       padding-left: 0;
