@@ -28,7 +28,6 @@ body {
   
   #dateGroup {
     display: none;
-    padding: 1rem;
   }
 
   input[type="date"] {
