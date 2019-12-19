@@ -9,7 +9,7 @@ const fadeToastOut = 1500;
 const timeBlockDelayMS = 30000;
 
 let updateInterval; // Periodic Update of past,present,future class
-let curDate = moment(); // Current Day is initially Today
+let curDate = moment().clone(); // Current Day is initially Today
 
 // JQuery
 $(function() {
@@ -53,7 +53,9 @@ function MultiDayChecked() {
         $("#dateGroup").hide();
         // Reset the day to today
         curDate = moment();
+        $("#datepicker").val(moment().format('YYYY-MM-DD'));
         loadDay(0);
+        SetCurrentDateLabel();
     }
 }
 
