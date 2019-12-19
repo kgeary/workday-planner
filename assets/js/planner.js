@@ -11,38 +11,19 @@ const timeBlockDelayMS = 30000;
 let updateInterval; // Periodic Update of past,present,future class
 let curDate = moment().clone(); // Current Day is initially Today
 
-// JQuery
-$(function() {
-    // Set the date in the header
-    SetCurrentDateLabel();
-
-    // Load Multi-day setting from local storage and update the checked state
-    LoadMultiDaySettings();
-    
-    // Watch for click of Enable Multi-day support
-    $("#enableDate").on("click", MultiDayChecked);
-
-    // Initialize the Date Picker and Setup a 'change' event handler
-    $("#datepicker").val(moment().format('YYYY-MM-DD'));
-    $("#datepicker").on("change", DatePickerChange);
-
-    // Load the day into the view Once at the start with a fade-in
-    loadDay(fadeStart);
-})
-
-function LoadMultiDaySettings() {
+function loadMultiDaySettings() {
     // Load Multi-day setting from local storage and set the check accordingly
     let enableMultiDay = (localStorage.getItem("enableMultiDay") === "true") ? true : false;
     if (enableMultiDay) {
         // Set the check, Show the DateGroup, trigger Date Change
         $("#enableDate").prop("checked", true);
         $("#dateGroup").show();
-        DatePickerChange();
+        datePickerChange();
     }
 }
 
 // When the Multi-day Checkbox changes state
-function MultiDayChecked() {
+function multiDayChecked() {
     // Update Local Storage with new Multi-day setting
     let $ed = $("#enableDate");
     localStorage.setItem("enableMultiDay", $ed.prop("checked"));
@@ -55,12 +36,12 @@ function MultiDayChecked() {
         curDate = moment();
         $("#datepicker").val(moment().format('YYYY-MM-DD'));
         loadDay(0);
-        SetCurrentDateLabel();
+        setCurrentDateLabel();
     }
 }
 
 // A new date was selected from the Date Picker
-function DatePickerChange() {
+function datePickerChange() {
     // Get the new date - If the date is not valid default to today
     curDate = moment($("#datepicker").val(), "YYYY-MM-DD");
     if (!curDate.isValid()) {
@@ -68,11 +49,21 @@ function DatePickerChange() {
     }
 
     // Update the header, cancel existing timers, fade in the content
-    SetCurrentDateLabel();
+    setCurrentDateLabel();
     loadDay(fadeNormal);
 }
+
+// Handle the Save Button click event
+function handleSave() {
+    var $desc = $(this).siblings(".description");
+    let hour = $desc.attr("data-hour");
+    let text = $desc.val();
+    localStorage.setItem(getStoreDatePrefix() + hour.trim(), text.trim());
+    $("#save-toast").fadeIn(fadeToastIn).fadeOut(fadeToastOut);
+}
+
 // Set's the current day in the header
-function SetCurrentDateLabel() {
+function setCurrentDateLabel() {
     $("#currentDay").text(curDate.format('dddd, MMMM Do'));
 }
 
@@ -85,15 +76,6 @@ function loadDay(fadeTime=0) {
     for(let index=0; index<times.length; index++) {
         $(".container").append(createTimeBlock(times[index]));
     }
-
-    // Setup Save Button Events
-    $(".saveBtn").on("click", function() {
-        var $desc = $(this).siblings(".description");
-        let hour = $desc.attr("data-hour");
-        let text = $desc.val();
-        localStorage.setItem(getStoreDatePrefix() + hour.trim(), text.trim());
-        $("#save-toast").fadeIn(fadeToastIn).fadeOut(fadeToastOut);
-    });
 
     // Setup Interval to Update past, present, future classes periodically (30s)
     updateInterval = setInterval(checkTimeBlocks, timeBlockDelayMS);
@@ -224,3 +206,25 @@ function getMoment12H(hour12) {
 function getMoment24H(hour24) { 
     return moment(curDate.format("YYYYMMDD ") + hour24, "YYYYMMDD H");
 }
+
+// Document Ready
+$(function() {
+    // Set the date in the header
+    setCurrentDateLabel();
+
+    // Load Multi-day setting from local storage and update the checked state
+    loadMultiDaySettings();
+    
+    // Watch for click of Enable Multi-day support
+    $("#enableDate").on("click", multiDayChecked);
+
+    // Initialize the Date Picker and Setup a 'change' event handler
+    $("#datepicker").val(moment().format('YYYY-MM-DD'));
+    $("#datepicker").on("change", datePickerChange);
+
+    // Setup Save Button Events through the container element
+    $(".container").on("click", ".saveBtn", handleSave);
+
+    // Load the day into the view Once at the start with a fade-in
+    loadDay(fadeStart);
+})
