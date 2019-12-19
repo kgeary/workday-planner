@@ -3,7 +3,6 @@
 Save your agenda for the work day.
 * Support for business day (9am-5pm)
 * Row shading to denote past, present, future time blocks
-* Data stored to browser and recalled for future use
 
 ## Directions
 Edit a row and click the save button to persist changes.
