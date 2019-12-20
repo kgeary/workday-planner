@@ -1,19 +1,22 @@
 # Day Planner
 ## Purpose
 Save your agenda for the work day.
-* Support for business day (9am-5pm)
-* Row shading to denote past, present, future time blocks
+* Support for a standard business day (9am-5pm)
+* Rows are shaded to denote whether they represent the past, present, or future
 
 ## Directions
-Edit a row and click the save button to persist changes.
-Time-blocks will be shaded according to when they happen
+* Click a row to select it. 
+* Edit the row with your notes for the hour. 
+* Click the save button for that hour to keep your changes.
+
+### Time-blocks are shaded to when they occur:
 * Past - Grey
 * Present - Red
 * Future - Green
   
 ## Multi-day Support
-* Check enable multi-day support.
-* Use the calendar to select a day to view/edit.
+* Check "multi-day" to enable support for other days.
+* Use the calendar to select a day.
 
 ## View the Site on GitHub Pages
 [Day Planner](https://kgeary.github.io/third-party-apis/)
