@@ -98,7 +98,6 @@ function loadDay(fadeTime=0) {
 // Check the timeblocks to see if their tense has changed
 // Go through each hour and compare 
 function checkTimeBlocks() {
-    console.log("Check Time Blocks Active");
     let $descriptions = $('.description');
     $descriptions.each(function(index) {
         let hour12 = $(this).attr("data-hour"); // Get the hour
