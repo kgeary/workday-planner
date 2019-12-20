@@ -1,7 +1,7 @@
 const times = [9,10,11,12,13,14,15,16,17];
 //const times = [9,10,11,12,13,14,15,16,17,18,19,20,21,22]; // TEST-LIST
-const fadeStart = 3000;
-const fadeNormal = 1500;
+const fadeStart = 1500;
+const fadeNormal = 1000;
 // Save Toast Fade Times
 const fadeToastIn = 750;
 const fadeToastOut = 1500;
